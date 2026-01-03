@@ -8,7 +8,8 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "tsx src/index.ts",
-    "test": "tsx src/index.ts --test"
+    "test": "tsx src/index.ts --test",
+    "test:webhook": "tsx test/send-test.ts"
   },
   "keywords": ["discord", "notification", "cron", "google-sheets"],
   "author": "",
