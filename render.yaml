@@ -1,0 +1,18 @@
+# Render用ビルド設定
+# render.yaml
+
+services:
+  - type: worker
+    name: discord-monthly-notifier
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: GOOGLE_SHEETS_CREDENTIALS
+        sync: false  # Renderのダッシュボードで設定
+      - key: SPREADSHEET_ID
+        value: 1iqrAhNjW8jTvobkur5N_9r9uUWFHCKqrhxM72X5z-iM
+      - key: SHEET_NAME
+        value: ❶RAW_生徒様情報
