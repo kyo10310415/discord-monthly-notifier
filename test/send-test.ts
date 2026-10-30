@@ -1,13 +1,16 @@
 import { DiscordNotifier } from '../src/discord.js';
 import { StudentData } from '../src/sheets.js';
 
+const webhookUrl = process.env.DISCORD_TEST_WEBHOOK_URL;
+if (!webhookUrl) throw new Error('DISCORD_TEST_WEBHOOK_URL must be configured for an explicit notification test');
+
 // テスト用の生徒データ
 const testStudent: StudentData = {
   name: 'テストユーザー',
   plan: '通常プラン',
   status: 'アクティブ',
   discordId: '',  // メンションなし（または実際のDiscord IDを入力）
-  webhookUrl: 'https://discord.com/api/webhooks/1282616705817903146/M4KSUtmoHYSDqySMBgtgjU0wZywkUkVtfh3KOOA-BNzgXMnwVnEphKwuleMXhFn60MYd'
+  webhookUrl
 };
 
 async function runTest() {
@@ -19,7 +22,6 @@ async function runTest() {
   console.log(`  名前: ${testStudent.name}`);
   console.log(`  プラン: ${testStudent.plan}`);
   console.log(`  ステータス: ${testStudent.status}`);
-  console.log(`  Webhook URL: ${testStudent.webhookUrl.substring(0, 50)}...`);
   console.log('');
   
   const notifier = new DiscordNotifier();
