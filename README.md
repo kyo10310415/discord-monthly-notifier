@@ -224,3 +224,8 @@ git push origin main
 
 `node --test test/safe-notification.test.cjs` は通信をstubに置換し、実際のWebhookへ送信しません。既存の `npm test` と `test:webhook` は実送信するため監査目的では実行しないでください。
 通知先はHTTPSのDiscord公式ホストとWebhookパスに限定し、リダイレクトは追従しません。任意ホスト、認証付きURL、追加ポート、クエリ付きURLは拒否します。ログには生徒名・通知先・プロバイダー本文・例外オブジェクトを残しません。過去のログはこの修正では削除されません。
+
+
+### 手動テスト送信の明示設定
+
+通常の通知設定は変更していません。手動の `test/send-test.ts` を本人が実行する場合だけ、専用の `DISCORD_TEST_WEBHOOK_URL` を設定してください。未設定では送信前に拒否し、URLや生徒名をログに出しません。自動セキュリティテストはHTTPスタブで動作し、実送信しません。外部Sheetの送信先もDiscord HTTPS webhookの正規形だけを許可し、redirectを追いません。
