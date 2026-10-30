@@ -39,8 +39,6 @@ async function runNotification() {
     const spreadsheetId = process.env.SPREADSHEET_ID!;
     const sheetName = process.env.SHEET_NAME!;
     
-    console.log(`スプレッドシートID: ${spreadsheetId}`);
-    console.log(`シート名: ${sheetName}\n`);
     
     const students = await sheetsService.getStudentData(spreadsheetId, sheetName);
     
@@ -56,7 +54,7 @@ async function runNotification() {
     console.log('\n通知処理が完了しました\n');
     
   } catch (error) {
-    console.error('❌ エラーが発生しました:', error);
+    console.error('通知処理エラー');
     throw error;
   }
 }
@@ -98,6 +96,6 @@ async function main() {
 
 // アプリケーション起動
 main().catch(error => {
-  console.error('致命的なエラー:', error);
+  console.error('通知サービス起動エラー');
   process.exit(1);
 });
