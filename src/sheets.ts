@@ -58,7 +58,7 @@ export class GoogleSheetsService {
       return students;
       
     } catch (error) {
-      console.error('Google Sheets APIエラー:', error);
+      console.error('Google Sheets APIエラー');
       throw error;
     }
   }

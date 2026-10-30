@@ -48,15 +48,29 @@ ${nextMonth}月から休会したい場合
    * Discord Webhookに通知を送信
    */
   async sendNotification(student: StudentData): Promise<boolean> {
+    let webhook: URL;
+    try {
+      webhook = new URL(student.webhookUrl);
+      if (webhook.protocol !== 'https:' ||
+          !['discord.com', 'discordapp.com', 'canary.discord.com', 'ptb.discord.com'].includes(webhook.hostname) ||
+          webhook.port || webhook.username || webhook.password || webhook.search || webhook.hash ||
+          !/^\/api(?:\/v\d+)?\/webhooks\/\d+\/[A-Za-z0-9_-]+$/.test(webhook.pathname)) {
+        throw new Error('Invalid webhook');
+      }
+    } catch {
+      console.warn('通知先Webhookが未設定または不正です');
+      return false;
+    }
     if (!student.webhookUrl) {
-      console.warn(`Webhook URLが設定されていません: ${student.name}`);
+      console.warn('通知先Webhookが設定されていません');
       return false;
     }
     
     try {
       const message = this.createMessage(student.discordId);
       
-      const response = await fetch(student.webhookUrl, {
+      const response = await fetch(webhook.href, {
+        redirect: 'error',
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -65,16 +79,15 @@ ${nextMonth}月から休会したい場合
       });
       
       if (response.ok) {
-        console.log(`✓ 通知送信成功: ${student.name}`);
+        console.log('通知送信成功');
         return true;
       } else {
-        const errorText = await response.text();
-        console.error(`✗ 通知送信失敗: ${student.name} - ${response.status} ${errorText}`);
+        console.error('通知送信失敗', response.status);
         return false;
       }
       
     } catch (error) {
-      console.error(`✗ 通知送信エラー: ${student.name}`, error);
+      console.error('通知送信エラー');
       return false;
     }
   }
